@@ -1,4 +1,5 @@
 import type { MetaFunction } from "@remix-run/node";
+import { Menu } from "~/components/menu/menu.component";
 
 export const meta: MetaFunction = () => {
   return [
@@ -8,5 +9,10 @@ export const meta: MetaFunction = () => {
 };
 
 export default function Index() {
-  return <div>landing page</div>;
+  return (
+    <div className="py-">
+      <Menu />
+      <div className="bg-brand">landing page</div>
+    </div>
+  );
 }
