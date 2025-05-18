@@ -1,4 +1,5 @@
 import type { MetaFunction } from "@remix-run/node";
+import { useTranslation } from "react-i18next";
 import { Menu } from "~/components/menu/menu.component";
 
 export const meta: MetaFunction = () => {
@@ -8,11 +9,17 @@ export const meta: MetaFunction = () => {
   ];
 };
 
+// This tells remix to load the "home" namespace
+export const handle = { i18n: "common" };
+
 export default function Index() {
+  const { t } = useTranslation();
+  console.log(t("greeting"), "t");
   return (
     <div className="py-">
       <Menu />
       <div className="bg-brand">landing page</div>
+      {t("greeting")}
     </div>
   );
 }

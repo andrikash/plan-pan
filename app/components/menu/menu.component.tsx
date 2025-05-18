@@ -1,4 +1,3 @@
-import { Link } from "@remix-run/react";
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -30,13 +29,12 @@ export const Menu = () => {
             <NavigationMenuList>
               {menuItems.map((item) => (
                 <NavigationMenuItem key={item.id}>
-                  <Link to={item.link}>
-                    <NavigationMenuLink
-                      className={navigationMenuTriggerStyle()}
-                    >
-                      {item.name}
-                    </NavigationMenuLink>
-                  </Link>
+                  <NavigationMenuLink
+                    href={item.link}
+                    className={navigationMenuTriggerStyle()}
+                  >
+                    {item.name}
+                  </NavigationMenuLink>
                 </NavigationMenuItem>
               ))}
             </NavigationMenuList>
