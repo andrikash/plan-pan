@@ -2,6 +2,7 @@ import {
   Links,
   Meta,
   Outlet,
+  redirect,
   Scripts,
   ScrollRestoration,
   useLoaderData,
@@ -26,10 +27,16 @@ export const links: LinksFunction = () => [
   },
 ];
 
-export async function loader({ request }: LoaderFunctionArgs) {
-  const locale = await i18next.getLocale(request);
-  return { locale };
-}
+export const loader = ({ request }) => {
+  const url = new URL(request.url);
+  const pathname = url.pathname;
+
+  if (pathname === "/") {
+    return redirect("/en");
+  }
+
+  return null;
+};
 
 export const handle = {
   // In the handle export, we can add a i18n key with namespaces our route
@@ -41,16 +48,16 @@ export const handle = {
 
 export function Layout({ children }: { children: React.ReactNode }) {
   // Get the locale from the loader
-  const { locale } = useLoaderData<typeof loader>();
+  // const { locale } = useLoaderData<typeof loader>();
   const { i18n } = useTranslation();
 
   // This hook will change the i18n instance language to the current locale
   // detected by the loader, this way, when we do something to change the
   // language, this locale will change and i18next will load the correct
   // translation files
-  useChangeLanguage(locale);
+  // useChangeLanguage(locale);
   return (
-    <html lang={locale} dir={i18n.dir()} className="bg-light-yellow">
+    <html lang={"en"} dir={i18n.dir()} className="bg-light-yellow">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />

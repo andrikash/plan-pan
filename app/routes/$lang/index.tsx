@@ -9,14 +9,11 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-// This tells remix to load the "home" namespace
-export const handle = { i18n: "common" };
-
 export default function Index() {
   const { t } = useTranslation();
-  console.log(t("greeting"), "t");
+
   return (
-    <div className="py-">
+    <div>
       <Menu />
       <div className="bg-brand">landing page</div>
       {t("greeting")}
