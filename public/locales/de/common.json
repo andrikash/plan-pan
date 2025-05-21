@@ -1,6 +1,12 @@
 {
-  "greeting": "Hallo",
   "languages": "Sprachen",
   "german": "Deutsch",
-  "english": "Englisch"
+  "english": "Englisch",
+  "place-order": "Bestellen",
+  "services": "Dienstleistungen",
+  "about-us": "Über uns",
+  "guarantees": "Garantien",
+  "feedback": "Feedbacks",
+  "contact-us": "Kontaktieren",
+  "greeting": "Hallo"
 }

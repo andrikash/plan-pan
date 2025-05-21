@@ -93,7 +93,9 @@ export const Menu = () => {
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-        <Button variant="default">Place Order</Button>
+        <Button variant="default">
+          {t("place-order", { defaultValue: "Place order" })}
+        </Button>
       </div>
     </div>
   );

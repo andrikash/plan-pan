@@ -9,7 +9,7 @@ const config = {
   createOldCatalogs: false,
   // Save the \_old files
 
-  defaultNamespace: "",
+  defaultNamespace: "common",
   // Default namespace used in your i18next config
 
   defaultValue: "",

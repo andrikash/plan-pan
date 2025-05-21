@@ -17,6 +17,7 @@ export default defineConfig({
     remix({
       routes(defineRoutes) {
         return defineRoutes((route) => {
+          // TODO: use core.layout.tsx instead of redirect-to-landing.page.tsx
           route("/", "pages/redirect-to-landing.page.tsx", {
             index: true,
           });
