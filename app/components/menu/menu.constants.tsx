@@ -1,7 +1,9 @@
-export const getMenuItems = () => [
+import { TFunction } from "i18next";
+
+export const getMenuItems = (t: TFunction) => [
   {
     id: 1,
-    name: "Services",
+    name: t("services", { defaultValue: "Services" }),
     link: "/services",
   },
   {

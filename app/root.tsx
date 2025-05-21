@@ -2,17 +2,16 @@ import {
   Links,
   Meta,
   Outlet,
-  redirect,
   Scripts,
   ScrollRestoration,
   useLoaderData,
 } from "@remix-run/react";
-import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
-import i18next from "./i18next.server";
+import type { LinksFunction } from "@remix-run/node";
 import { useChangeLanguage } from "remix-i18next/react";
 
 import "./tailwind.css";
 import { useTranslation } from "react-i18next";
+import { getLanguageSegmentFromUrl } from "./lib/utils";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -27,17 +26,6 @@ export const links: LinksFunction = () => [
   },
 ];
 
-export const loader = ({ request }) => {
-  const url = new URL(request.url);
-  const pathname = url.pathname;
-
-  if (pathname === "/") {
-    return redirect("/en");
-  }
-
-  return null;
-};
-
 export const handle = {
   // In the handle export, we can add a i18n key with namespaces our route
   // will need to load. This key can be a single string or an array of strings.
@@ -46,18 +34,25 @@ export const handle = {
   i18n: "common",
 };
 
+export const loader = async ({ request }: { request: Request }) => {
+  const url = new URL(request.url);
+  const locale = getLanguageSegmentFromUrl(url);
+
+  return { locale };
+};
+
 export function Layout({ children }: { children: React.ReactNode }) {
   // Get the locale from the loader
-  // const { locale } = useLoaderData<typeof loader>();
+  const { locale } = useLoaderData<typeof loader>();
   const { i18n } = useTranslation();
 
   // This hook will change the i18n instance language to the current locale
   // detected by the loader, this way, when we do something to change the
   // language, this locale will change and i18next will load the correct
   // translation files
-  // useChangeLanguage(locale);
+  useChangeLanguage(locale);
   return (
-    <html lang={"en"} dir={i18n.dir()} className="bg-light-yellow">
+    <html lang={locale} dir={i18n.dir()} className="bg-light-yellow">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />

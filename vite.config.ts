@@ -15,12 +15,19 @@ export default defineConfig({
     tailwindcss(),
     remixDevTools(),
     remix({
-      future: {
-        v3_fetcherPersist: true,
-        v3_relativeSplatPath: true,
-        v3_throwAbortReason: true,
-        v3_singleFetch: true,
-        v3_lazyRouteDiscovery: true,
+      routes(defineRoutes) {
+        return defineRoutes((route) => {
+          route("/", "pages/redirect-to-landing.page.tsx", {
+            index: true,
+          });
+          route("/:lang", "layouts/core.layout.tsx", () => {
+            route("landing-page", "pages/landing.page.tsx");
+            route("auth", "layouts/auth.layout.tsx", () => {
+              route("login", "pages/login.page.tsx");
+            });
+          });
+          route("/not-found", "pages/not-found.page.tsx");
+        });
       },
     }),
     tsconfigPaths(),

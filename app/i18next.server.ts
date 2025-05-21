@@ -9,7 +9,6 @@ const i18next = new RemixI18Next({
     fallbackLanguage: i18n.fallbackLng,
     async findLocale(request) {
       const locale = new URL(request.url).pathname.split("/").at(1);
-      console.log(locale, "locale");
       return locale;
     },
   },

@@ -1,3 +1,6 @@
 {
-  "greeting": "Hallo"
+  "greeting": "Hallo",
+  "languages": "Sprachen",
+  "german": "Deutsch",
+  "english": "Englisch"
 }

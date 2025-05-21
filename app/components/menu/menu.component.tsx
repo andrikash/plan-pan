@@ -14,12 +14,22 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { CircleUserRound, LogOut } from "lucide-react";
+import { CircleUserRound, Languages, LogOut } from "lucide-react";
 import { Button } from "../ui/button";
+import { useTranslation } from "react-i18next";
+import { Locales } from "~/const/constants";
+import { useNavigate } from "@remix-run/react";
 
 export const Menu = () => {
-  const menuItems = getMenuItems();
+  const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
+  const menuItems = getMenuItems(t);
   const email = "example@email.com";
+  const changeLang = (lang: string) => {
+    i18n.changeLanguage(lang);
+    navigate(`/${lang}/landing-page`);
+  };
+
   return (
     <div className="flex items-center justify-between p-20">
       <img src="/images/logo.png" alt="Logo" className="w-[192px]" />
@@ -60,6 +70,25 @@ export const Menu = () => {
                   <LogOut />
                   Log out
                 </div>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <DropdownMenu>
+            <DropdownMenuTrigger className="hover:bg-accent cursor-pointer px-4 h-9 rounded-md">
+              <Languages />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>
+                <div className="flex flex-col gap-y-2">
+                  {t("languages", { defaultValue: "Languages" })}
+                </div>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => changeLang(Locales.DE)}>
+                {t("german", { defaultValue: "German" })}
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => changeLang(Locales.EN)}>
+                {t("english", { defaultValue: "English" })}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
