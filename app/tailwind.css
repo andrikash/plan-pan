@@ -12,7 +12,27 @@
 
   /* Colors */
   --color-light-yellow: oklch(0.99 0.0092 62.59);
-  --color-primary-orange: oklch(0.8 0.1461 64.6);
+  --color-primary-100: #ffa94d;
+  --color-primary-80: #ffba70;
+  --color-primary-60: #ffe3c2;
+  --color-primary-30: #ffeddb;
+  --color-primary-0: #fff9f4;
+  --color-gray-100: #333333;
+  --color-secondary-100: #1c7ed6;
+  --color-secondary-80: #459be8;
+  --color-secondary-60: #78bcf9;
+  --color-secondary-30: #f6fbff;
+  --color-gray-100: #333333;
+  --color-gray-80: #495057;
+  --color-gray-60: #868e96;
+  --color-gray-30: #cfd5dc;
+  --color-gray-20: #f0f0f0;
+  --color-gray-10: #f7f7f7;
+  --color-gray-0: #ffffff;
+  --color-system-error: #ff5a54;
+  --color-system-success: #3ad25c;
+  --color-system-warning: #ffd33e;
+  --color-system-info: #9c6dff;
 }
 
 /*
@@ -35,7 +55,7 @@
 
 html,
 body {
-  @apply bg-light-yellow dark:bg-gray-950 font-hanuman;
+  @apply bg-light-yellow text-gray-100 dark:bg-gray-950 font-hanuman;
 
   @media (prefers-color-scheme: dark) {
     color-scheme: dark;

@@ -22,10 +22,12 @@ export default defineConfig({
             index: true,
           });
           route("/:lang", "layouts/core.layout.tsx", () => {
-            route("landing-page", "pages/landing.page.tsx");
-            route("auth", "layouts/auth.layout.tsx", () => {
-              route("login", "pages/login.page.tsx");
-            });
+            route("", "layouts/menu.layout.tsx", () => {
+              route("landing-page", "pages/landing-page/landing.page.tsx");
+            }),
+              route("auth", "layouts/auth.layout.tsx", () => {
+                route("login", "pages/login.page.tsx");
+              });
           });
           route("/not-found", "pages/not-found.page.tsx");
         });

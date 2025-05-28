@@ -1,6 +1,6 @@
 import { Outlet } from "@remix-run/react";
 import { redirect } from "@remix-run/node";
-import { locales } from "~/const/constants";
+import { Locales, locales } from "~/const/constants";
 import { getLanguageSegmentFromUrl } from "~/lib/utils";
 
 export const loader = async ({ request }: { request: Request }) => {

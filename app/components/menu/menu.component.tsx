@@ -19,6 +19,7 @@ import { Button } from "../ui/button";
 import { useTranslation } from "react-i18next";
 import { Locales } from "~/const/constants";
 import { useNavigate } from "@remix-run/react";
+import { SecondaryText } from "../typography/secondary-text.component";
 
 export const Menu = () => {
   const { t, i18n } = useTranslation();
@@ -43,7 +44,7 @@ export const Menu = () => {
                     href={item.link}
                     className={navigationMenuTriggerStyle()}
                   >
-                    {item.name}
+                    <SecondaryText text={item.name} />
                   </NavigationMenuLink>
                 </NavigationMenuItem>
               ))}
