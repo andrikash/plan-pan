@@ -1,0 +1,1345 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Calendar Service API",
+    "version": "1.0.0",
+    "description": "API for managing chat, orders and payments."
+  },
+  "servers": [
+    {
+      "url": "https://dev-api.planandpan.com",
+      "description": "Development server"
+    }
+  ],
+  "paths": {
+    "/api/auth/register": {
+      "post": {
+        "summary": "Register a new user.",
+        "tags": ["Auth"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserRegister"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User registered successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegisterResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error."
+          },
+          "500": {
+            "description": "Server error."
+          }
+        }
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "summary": "Login a user.",
+        "tags": ["Auth"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserLogin"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User successfully logged in.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid credentials."
+          },
+          "500": {
+            "description": "Server error."
+          }
+        }
+      }
+    },
+    "/api/auth/resend-confirmation": {
+      "post": {
+        "summary": "Resend confirmation email",
+        "tags": ["Auth"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "description": "User's email.",
+                    "example": "user@example.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Confirmation email resent successfully."
+          },
+          "400": {
+            "description": "User is already verified."
+          },
+          "404": {
+            "description": "User not found."
+          },
+          "500": {
+            "description": "Server error."
+          }
+        }
+      }
+    },
+    "/api/auth/confirm/{token}": {
+      "get": {
+        "summary": "Confirm the user's email.",
+        "tags": ["Auth"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Email confirmation token."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Email confirmed successfully."
+          },
+          "400": {
+            "description": "Invalid or expired token."
+          },
+          "404": {
+            "description": "User not found."
+          }
+        }
+      }
+    },
+    "/api/auth/profile": {
+      "get": {
+        "summary": "Get the authenticated user's profile.",
+        "tags": ["Auth"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User's profile retrieved successfully."
+          },
+          "401": {
+            "description": "Unauthorized. Missing or invalid token."
+          },
+          "500": {
+            "description": "Server error."
+          }
+        }
+      }
+    },
+    "/api/auth/logout": {
+      "post": {
+        "summary": "Get the authenticated user's profile.",
+        "tags": ["Auth"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Logged out successfully."
+          },
+          "401": {
+            "description": "Unauthorized. Missing or invalid token."
+          },
+          "500": {
+            "description": "Server error."
+          }
+        }
+      }
+    },
+    "/api/chats/{chatId}/messages": {
+      "get": {
+        "summary": "Get the most recent messages for a chat.",
+        "tags": ["Messages"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "chatId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID of the chat to fetch messages from."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Messages retrieved successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Message"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Chat ID is required."
+          },
+          "500": {
+            "description": "Server error."
+          }
+        }
+      },
+      "post": {
+        "summary": "Send a new message in a chat.",
+        "tags": ["Messages"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "chatId": {
+                    "type": "string",
+                    "description": "ID of the chat to send the message to.",
+                    "example": "603e1f1b1234abcd5678ef90"
+                  },
+                  "sender": {
+                    "type": "string",
+                    "description": "ID of the sender.",
+                    "example": "603e1f1b1234abcd5678ef91"
+                  },
+                  "content": {
+                    "type": "string",
+                    "description": "The message content.",
+                    "example": "Hi, this is message."
+                  },
+                  "files": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    },
+                    "description": "Attachments to the message."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Message sent successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Required fields are missing."
+          },
+          "500": {
+            "description": "Server error."
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "chatId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID of the chat to send the message to."
+          }
+        ]
+      }
+    },
+    "/api/chats/{chatId}/messages/older": {
+      "get": {
+        "summary": "Get older messages from a chat.",
+        "tags": ["Messages"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "chatId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID of the chat to fetch older messages from."
+          },
+          {
+            "in": "query",
+            "name": "beforeMessageId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID of the last message received, used to fetch older messages."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Older messages retrieved successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Message"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Chat ID or beforeMessageId is required."
+          },
+          "500": {
+            "description": "Server error."
+          }
+        }
+      }
+    },
+    "/api/chats/{chatId}/messages/new": {
+      "get": {
+        "summary": "Get new messages from a chat.",
+        "tags": ["Messages"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "chatId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID of the chat to fetch new messages from."
+          },
+          {
+            "in": "query",
+            "name": "lastMessageId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID of the last message received, used to fetch newer messages."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "New messages retrieved successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Message"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Chat ID or lastMessageId is required."
+          },
+          "500": {
+            "description": "Server error."
+          }
+        }
+      }
+    },
+    "/api/files/get": {
+      "post": {
+        "summary": "Generate a pre-signed URL for file download.",
+        "tags": ["Files"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["key", "newFileName"],
+                "properties": {
+                  "key": {
+                    "type": "string",
+                    "description": "The S3 key of the file to download.",
+                    "example": "uploads/example-file.txt"
+                  },
+                  "newFileName": {
+                    "type": "string",
+                    "description": "The custom file name for download.",
+                    "example": "custom-name.txt"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully generated a pre-signed URL for the file.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "url": {
+                      "type": "string",
+                      "description": "The generated pre-signed URL.",
+                      "example": "https://s3.amazonaws.com/bucket-name/uploads/example-file.txt?AWSAccessKeyId=..."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request. Missing or invalid input.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Key and new file name are required."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Server error."
+                    },
+                    "error": {
+                      "type": "string",
+                      "example": "Error generating presigned URL."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/chat/{chatId}": {
+      "get": {
+        "summary": "Retrieve all attachments in a chat.",
+        "description": "Fetches all file attachments from messages in a specified chat, sorted by creation date in descending order.",
+        "tags": ["Chat"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "chatId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the chat to retrieve attachments for."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of attachments retrieved successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "attachments": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "attachment": {
+                            "type": "array",
+                            "description": "List of attachment details.",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "url": {
+                                  "type": "string",
+                                  "description": "The URL of the file.",
+                                  "example": "https://s3.amazonaws.com/bucket-name/file-name.docx"
+                                },
+                                "fileType": {
+                                  "type": "string",
+                                  "description": "The MIME type of the file.",
+                                  "example": "application/pdf"
+                                }
+                              }
+                            }
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "The date and time the attachment was created.",
+                            "example": "2024-01-01T12:34:56.000Z"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request. Missing or invalid chat ID.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Chat id is required"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error while retrieving attachments.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Server error"
+                    },
+                    "error": {
+                      "type": "string",
+                      "example": "Detailed error message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/orders": {
+      "post": {
+        "summary": "Create a new order.",
+        "tags": ["Orders"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateOrderRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Order created successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Order"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error."
+          },
+          "500": {
+            "description": "Server error."
+          }
+        }
+      },
+      "get": {
+        "summary": "Get all orders with optional filters, sorting, and pagination.",
+        "tags": ["Orders"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "orderId",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter orders by orderId.",
+            "example": 3452
+          },
+          {
+            "in": "query",
+            "name": "email",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter orders by client email.",
+            "example": "client@example.com"
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "schema": {
+              "type": "string",
+              "enum": ["pending", "processing", "completed", "cancelled"]
+            },
+            "description": "Filter orders by status.",
+            "example": "pending"
+          },
+          {
+            "in": "query",
+            "name": "sortBy",
+            "schema": {
+              "type": "string",
+              "enum": ["createdAt", "deadline"]
+            },
+            "description": "Field to sort results by.",
+            "example": "deadline"
+          },
+          {
+            "in": "query",
+            "name": "sortOrder",
+            "schema": {
+              "type": "string",
+              "enum": ["asc", "desc"]
+            },
+            "description": "Sort order for results.",
+            "example": "asc"
+          },
+          {
+            "in": "query",
+            "name": "pageNumber",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Pagination number."
+            },
+            "example": 1
+          },
+          {
+            "in": "query",
+            "name": "pageSize",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "description": "Number of items per page."
+            },
+            "example": 20
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of orders retrieved successfully with pagination information.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Order"
+                      }
+                    },
+                    "pagination": {
+                      "type": "object",
+                      "properties": {
+                        "totalDocuments": {
+                          "type": "integer",
+                          "example": 100
+                        },
+                        "totalPages": {
+                          "type": "integer",
+                          "example": 5
+                        },
+                        "currentPage": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "pageSize": {
+                          "type": "integer",
+                          "example": 20
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Server error."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/orders/{id}": {
+      "get": {
+        "summary": "Get a specific order by ID.",
+        "tags": ["Orders"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The unique identifier of the order."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Order details retrieved successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Order"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Unauthorized access."
+          },
+          "404": {
+            "description": "Order not found."
+          },
+          "500": {
+            "description": "Server error."
+          }
+        }
+      },
+      "put": {
+        "summary": "Update an existing order (Admin only).",
+        "tags": ["Orders"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The unique identifier of the order."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateOrderRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Order updated successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Order"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error or invalid fields."
+          },
+          "403": {
+            "description": "Unauthorized access."
+          },
+          "404": {
+            "description": "Order not found."
+          },
+          "500": {
+            "description": "Server error."
+          }
+        }
+      }
+    },
+    "/api/password/forgot": {
+      "post": {
+        "summary": "Request a password reset",
+        "tags": ["Password"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PasswordResetRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password reset email sent successfully"
+          },
+          "404": {
+            "description": "User with the specified email not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/api/password/reset": {
+      "post": {
+        "summary": "Reset the user's password",
+        "tags": ["Password"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PasswordReset"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password reset successfully"
+          },
+          "400": {
+            "description": "Invalid or expired token"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/api/password/change": {
+      "post": {
+        "summary": "Change a user's password.",
+        "tags": ["Password"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangePasswordRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password changed successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChangePasswordResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Current password is incorrect.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Current password is incorrect."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "User not found."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Server error."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "UserRegister": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email (must be valid and unique).",
+            "example": "user@example.com"
+          },
+          "password": {
+            "type": "string",
+            "description": "Password requirements:\n- At least 8 characters long\n- At most 32 characters long\n- Contain at least one uppercase letter\n- Contain at least one lowercase letter\n- Contain at least one number\n- Contain at least one special character\n- Must not contain spaces\n",
+            "example": "StrongPass123!"
+          }
+        }
+      },
+      "UserLogin": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email.",
+            "example": "user@example.com"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password.",
+            "example": "StrongPass123!"
+          }
+        }
+      },
+      "AuthResponse": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "description": "Authentication token.",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
+          },
+          "user": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "User's ID.",
+                "example": "603e1f1b1234abcd5678ef90"
+              },
+              "email": {
+                "type": "string",
+                "description": "User's email.",
+                "example": "user@example.com"
+              },
+              "role": {
+                "type": "string",
+                "description": "User's role (e.g., admin, user).",
+                "example": "user"
+              }
+            }
+          }
+        }
+      },
+      "RegisterResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Success message.",
+            "example": "User registered successfully. Please check your email to confirm your account."
+          }
+        }
+      },
+      "Message": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Unique identifier for the message.",
+            "example": "64a55c7fa2b3a2d7a8e2b5b9"
+          },
+          "chatId": {
+            "type": "string",
+            "description": "ID of the chat the message belongs to.",
+            "example": "603e1f1b1234abcd5678ef90"
+          },
+          "sender": {
+            "type": "string",
+            "description": "ID of the user who sent the message.",
+            "example": "603e1f1b1234abcd5678ef91"
+          },
+          "content": {
+            "type": "string",
+            "description": "The text content of the message.",
+            "example": "Hello, how can I help you?"
+          },
+          "attachments": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "url": {
+                  "type": "string",
+                  "description": "URL of the attachment file.",
+                  "example": "https://your-s3-bucket.s3.amazonaws.com/uploads/file.jpg"
+                },
+                "fileType": {
+                  "type": "string",
+                  "description": "MIME type of the file.",
+                  "example": "image/jpeg"
+                }
+              }
+            }
+          },
+          "isRead": {
+            "type": "boolean",
+            "description": "Whether the message has been read.",
+            "example": false
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp of when the message was created.",
+            "example": "2024-01-01T12:00:00Z"
+          }
+        }
+      },
+      "Order": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "The unique identifier for the order.",
+            "example": "64a55c7fa2b3a2d7a8e2b5a8"
+          },
+          "workType": {
+            "type": "string",
+            "description": "The type of work requested (e.g., essay, research).",
+            "example": "Research Paper"
+          },
+          "subjectArea": {
+            "type": "string",
+            "description": "The subject area of the order.",
+            "example": "Computer Science"
+          },
+          "email": {
+            "type": "string",
+            "description": "Email of the client associated with the order.",
+            "example": "client@example.com"
+          },
+          "deadline": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Deadline for the order.",
+            "example": "2024-12-20T00:00:00.000Z"
+          },
+          "pages": {
+            "type": "number",
+            "description": "Number of pages required for the order.",
+            "example": 15
+          },
+          "client": {
+            "type": "string",
+            "description": "The ID of the client who made the order.",
+            "example": "603e1f1b1234abcd5678ef90"
+          },
+          "chat": {
+            "type": "string",
+            "description": "ID of the chat associated with this order.",
+            "example": "64a55c7fa2b3a2d7a8e2b5b9"
+          },
+          "status": {
+            "type": "string",
+            "description": "Status of the order.",
+            "example": "pending"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "description": "Contact phone number of the client.",
+            "example": 491234567890
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp of when the order was created.",
+            "example": "2024-12-01T10:00:00.000Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp of the last update to the order.",
+            "example": "2024-12-02T12:00:00.000Z"
+          }
+        }
+      },
+      "CreateOrderRequest": {
+        "type": "object",
+        "required": ["workType", "subjectArea", "email", "deadline", "pages"],
+        "properties": {
+          "workType": {
+            "type": "string",
+            "description": "The type of work requested.",
+            "example": "Research Paper"
+          },
+          "subjectArea": {
+            "type": "string",
+            "description": "The subject area of the order.",
+            "example": "Computer Science"
+          },
+          "email": {
+            "type": "string",
+            "description": "Email of the client making the order.",
+            "example": "client@example.com"
+          },
+          "deadline": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Deadline for the order.",
+            "example": "2024-12-20T00:00:00.000Z"
+          },
+          "pages": {
+            "type": "number",
+            "description": "Number of pages requested.",
+            "example": 15
+          },
+          "phoneNumber": {
+            "type": "string",
+            "description": "Client's phone number.",
+            "example": 491234567890
+          },
+          "firstName": {
+            "type": "string",
+            "description": "Client's first name.",
+            "example": "John"
+          },
+          "lastName": {
+            "type": "string",
+            "description": "Client's last name.",
+            "example": "Doe"
+          },
+          "files": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "binary"
+            },
+            "description": "Attachments to the message."
+          }
+        }
+      },
+      "PasswordResetRequest": {
+        "type": "object",
+        "required": ["email"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "The email of the user requesting a password reset"
+          }
+        },
+        "example": {
+          "email": "user@example.com"
+        }
+      },
+      "PasswordReset": {
+        "type": "object",
+        "required": ["token", "password"],
+        "properties": {
+          "token": {
+            "type": "string",
+            "description": "The token sent to the user's email"
+          },
+          "password": {
+            "type": "string",
+            "description": "The new password for the user"
+          },
+          "email": {
+            "type": "string",
+            "description": "The email of the user resetting the password"
+          }
+        },
+        "example": {
+          "token": "abc123",
+          "password": "myNewSecurePassword123",
+          "email": "user@example.com"
+        }
+      },
+      "ChangePasswordRequest": {
+        "type": "object",
+        "required": ["userId", "currentPassword", "newPassword"],
+        "properties": {
+          "currentPassword": {
+            "type": "string",
+            "description": "The user's current password.",
+            "example": "OldPassword123!"
+          },
+          "newPassword": {
+            "type": "string",
+            "description": "The new password the user wants to set.",
+            "example": "NewPassword123!"
+          }
+        }
+      },
+      "ChangePasswordResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Success message.",
+            "example": "Password changed successfully."
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "tags": []
+}

@@ -16,6 +16,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "~/components/ui/accordion";
+import { SendOrder } from "./components/send-order/send-order.component";
 
 export default function LandingPage() {
   const { t } = useTranslation();
@@ -189,6 +190,7 @@ export default function LandingPage() {
           </AccordionItem>
         </Accordion>
       </div>
+      <SendOrder />
     </div>
   );
 }

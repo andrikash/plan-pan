@@ -6,12 +6,14 @@ import {
   ScrollRestoration,
   useLoaderData,
 } from "@remix-run/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type { LinksFunction } from "@remix-run/node";
 import { useChangeLanguage } from "remix-i18next/react";
 
 import "./tailwind.css";
 import { useTranslation } from "react-i18next";
 import { getLanguageSegmentFromUrl } from "./lib/utils";
+import { useState } from "react";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -69,5 +71,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  return <Outlet />;
+  const [queryClient] = useState(() => new QueryClient());
+  return (
+    <QueryClientProvider client={queryClient}>
+      <Outlet />
+    </QueryClientProvider>
+  );
 }
