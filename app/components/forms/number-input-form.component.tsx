@@ -6,9 +6,9 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
-import { Input } from "../ui/input";
+import { NumberInput } from "../ui/number-input";
 
-interface InputFormProps {
+interface NumberInputFormProps {
   form: any; // TODO: Replace with the actual type of your form control
   placeholder: string;
   label: string;
@@ -17,14 +17,13 @@ interface InputFormProps {
   type?: string;
 }
 
-export function InputForm({
+export function NumberInputForm({
   form,
   placeholder,
   label,
   required,
   fieldName,
-  type = "text",
-}: InputFormProps) {
+}: NumberInputFormProps) {
   return (
     <FormField
       control={form.control}
@@ -36,7 +35,13 @@ export function InputForm({
             {required && <sup className="text-red-500">*</sup>}
           </FormLabel>
           <FormControl>
-            <Input placeholder={placeholder} type={type} {...field} />
+            <NumberInput
+              placeholder={placeholder}
+              value={field.value}
+              onValueChange={(value) => {
+                field.onChange(value);
+              }}
+            />
           </FormControl>
           <FormMessage />
         </FormItem>

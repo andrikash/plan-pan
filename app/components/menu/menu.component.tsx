@@ -31,6 +31,8 @@ export const Menu = () => {
     navigate(`/${lang}/landing-page`);
   };
 
+  const lang = i18n.language || Locales.EN;
+
   return (
     <div className="flex items-center justify-between p-20">
       <img src="/images/logo.png" alt="Logo" className="w-[192px]" />
@@ -50,6 +52,25 @@ export const Menu = () => {
               ))}
             </NavigationMenuList>
           </NavigationMenu>
+          <DropdownMenu>
+            <DropdownMenuTrigger className="hover:bg-accent cursor-pointer px-4 h-9 rounded-md">
+              <Languages />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>
+                <div className="flex flex-col gap-y-2">
+                  {t("languages", { defaultValue: "Languages" })}
+                </div>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => changeLang(Locales.DE)}>
+                {t("german", { defaultValue: "German" })}
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => changeLang(Locales.EN)}>
+                {t("english", { defaultValue: "English" })}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
           <DropdownMenu>
             <DropdownMenuTrigger className="hover:bg-accent cursor-pointer px-4 h-9 rounded-md">
               <CircleUserRound />
@@ -74,27 +95,11 @@ export const Menu = () => {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          <DropdownMenu>
-            <DropdownMenuTrigger className="hover:bg-accent cursor-pointer px-4 h-9 rounded-md">
-              <Languages />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>
-                <div className="flex flex-col gap-y-2">
-                  {t("languages", { defaultValue: "Languages" })}
-                </div>
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => changeLang(Locales.DE)}>
-                {t("german", { defaultValue: "German" })}
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => changeLang(Locales.EN)}>
-                {t("english", { defaultValue: "English" })}
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
         </div>
-        <Button variant="default">
+        <Button
+          variant="default"
+          onClick={() => navigate(`/${lang}/auth/login`)}
+        >
           {t("place-order", { defaultValue: "Place order" })}
         </Button>
       </div>

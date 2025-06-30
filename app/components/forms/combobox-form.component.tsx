@@ -33,6 +33,7 @@ interface ComboboxFormProps {
   fieldName: string;
   label: string;
   required?: boolean;
+  className?: string;
 }
 
 export function ComboboxForm({
@@ -49,7 +50,7 @@ export function ComboboxForm({
       control={form.control}
       name={fieldName}
       render={({ field }) => (
-        <FormItem className="flex flex-col">
+        <FormItem className="flex flex-col w-full">
           <FormLabel>
             <MainText text={label} />
             {required && <sup className="text-red-500">*</sup>}
@@ -61,7 +62,7 @@ export function ComboboxForm({
                   variant="outline"
                   role="combobox"
                   className={cn(
-                    "w-[200px] justify-between",
+                    "justify-between",
                     !field.value && "text-muted-foreground"
                   )}
                 >
@@ -80,7 +81,7 @@ export function ComboboxForm({
                 </Button>
               </PopoverTrigger>
             </FormControl>
-            <PopoverContent className="w-[200px] p-0">
+            <PopoverContent className="w-[200px] p-0" align="end">
               <Command>
                 <CommandInput placeholder="Search option..." className="h-9" />
                 <CommandList>

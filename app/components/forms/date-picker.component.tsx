@@ -9,31 +9,45 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Button } from "../ui/button";
 import { cn } from "~/lib/utils";
-import { format } from "date-fns";
+import { format, subDays } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { Calendar } from "../ui/calendar";
+import { useState } from "react";
+import { MainText } from "../typography/main-text.component";
 
 interface DatePickerFormProps {
   form: any; // TODO: Replace with the actual type of your form control
   label: string;
+  fieldName: string;
+  required?: boolean;
 }
 
-export function DatePickerForm({ form, label }: DatePickerFormProps) {
+export function DatePickerForm({
+  form,
+  label,
+  fieldName,
+  required,
+}: DatePickerFormProps) {
   const { t } = useTranslation();
+  const [open, setOpen] = useState(false);
+  const yesterday = subDays(new Date(), 1);
   return (
     <FormField
       control={form.control}
-      name="dob"
+      name={fieldName}
       render={({ field }) => (
-        <FormItem className="flex flex-col">
-          <FormLabel>{label} </FormLabel>
-          <Popover>
+        <FormItem className="flex flex-col w-full">
+          <FormLabel>
+            <MainText text={label} />
+            {required && <span className="text-red-500">*</span>}
+          </FormLabel>
+          <Popover open={open} onOpenChange={setOpen}>
             <FormControl>
               <PopoverTrigger asChild>
                 <Button
                   variant={"outline"}
                   className={cn(
-                    "w-[240px] pl-3 text-left font-normal",
+                    "pl-3 text-left font-normal",
                     !field.value && "text-muted-foreground"
                   )}
                 >
@@ -46,13 +60,16 @@ export function DatePickerForm({ form, label }: DatePickerFormProps) {
                 </Button>
               </PopoverTrigger>
             </FormControl>
-            <PopoverContent className="p-0" align="start">
+            <PopoverContent className="w-auto p-0" align="start">
               <Calendar
                 mode="single"
                 selected={field.value}
-                onSelect={field.onChange}
+                onSelect={(date) => {
+                  field.onChange(date);
+                  setOpen(false);
+                }}
                 disabled={(date) =>
-                  date > new Date() || date < new Date("1900-01-01")
+                  date < yesterday || date < new Date("1900-01-01")
                 }
                 initialFocus
               />

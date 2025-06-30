@@ -29,7 +29,8 @@ export default defineConfig({
                 route("login", "pages/login.page.tsx");
               });
           });
-          route("/not-found", "pages/not-found.page.tsx");
+          // Catch-all 404 route (must be last)
+          route("*", "pages/not-found.page.tsx");
         });
       },
     }),
