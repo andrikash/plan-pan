@@ -1,8 +1,7 @@
-// src/api/custom-instance.ts
-import axios, { AxiosRequestConfig } from "axios";
+import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 
 export const AXIOS_INSTANCE = axios.create({
-  baseURL: process.env.BASE_URL,
+  baseURL: import.meta.env.VITE_BASE_URL,
 });
 
 // Add token to headers for each request
@@ -16,15 +15,19 @@ AXIOS_INSTANCE.interceptors.request.use((config) => {
   return config;
 });
 
-// A wrapper for Orval's mutator to use the custom Axios instance
+// Return the whole AxiosResponse<T>
 export const customInstance = <T>(
   config: AxiosRequestConfig,
   options?: AxiosRequestConfig
-): Promise<T> => {
+): Promise<AxiosResponse<T>> => {
   const mergedConfig = {
     ...config,
     ...options,
   };
 
-  return AXIOS_INSTANCE(mergedConfig).then((response) => response.data);
+  return AXIOS_INSTANCE(mergedConfig);
 };
+
+// Error & body helpers
+export type ErrorType<Error> = AxiosError<Error>;
+export type BodyType<BodyData> = BodyData;

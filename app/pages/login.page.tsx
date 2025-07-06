@@ -18,7 +18,6 @@ import { SmallText } from "~/components/typography/small-text.component";
 import { Button } from "~/components/ui/button";
 import { Form } from "~/components/ui/form";
 import { Locales } from "~/const/constants";
-import { AuthErrorResponse } from "~/types/api";
 
 const getFormSchema = (t: TFunction) =>
   z.object({
@@ -48,7 +47,7 @@ const Login = () => {
         navigate(`/${i18n.language || Locales.EN}/place-order`);
         form.reset();
       },
-      onError: (error: AxiosError<AuthErrorResponse>) => {
+      onError: (error: AxiosError<{ error?: string }>) => {
         console.error("Registration error:", error.response?.data?.error);
         form.setError("email", {
           type: "manual",

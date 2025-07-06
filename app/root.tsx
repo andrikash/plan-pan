@@ -40,12 +40,17 @@ export const loader = async ({ request }: { request: Request }) => {
   const url = new URL(request.url);
   const locale = getLanguageSegmentFromUrl(url);
 
-  return { locale };
+  return {
+    locale,
+    ENV: {
+      BASE_URL: process.env.BASE_URL,
+    },
+  };
 };
 
 export function Layout({ children }: { children: React.ReactNode }) {
   // Get the locale from the loader
-  const { locale } = useLoaderData<typeof loader>();
+  const { locale, ENV } = useLoaderData<typeof loader>();
   const { i18n } = useTranslation();
 
   // This hook will change the i18n instance language to the current locale
@@ -65,6 +70,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
         {children}
         <ScrollRestoration />
         <Scripts />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.ENV = ${JSON.stringify(ENV)}`,
+          }}
+        />
       </body>
     </html>
   );

@@ -6,11 +6,10 @@ export default {
       target: "./app/api", // where generated client files go
       schemas: "./app/types/api", // where the types go
       client: "react-query", // auto-generate TanStack Query hooks
-      baseUrl: "https://dev-api.planandpan.com", // base URL for the API
       // custom instance for the API client
       override: {
         mutator: {
-          path: "./api/mutator/custom-instance.ts",
+          path: "./app/api/mutator/custom-instance.ts",
           name: "customInstance",
         },
       },
