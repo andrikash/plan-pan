@@ -24,9 +24,14 @@ export default defineConfig({
           route("/:lang", "layouts/core.layout.tsx", () => {
             route("", "layouts/menu.layout.tsx", () => {
               route("landing-page", "pages/landing-page/landing.page.tsx");
+              route("dashboard", "pages/dashboard.page.tsx");
+              route("place-order", "pages/place-order.page.tsx");
             }),
               route("auth", "layouts/auth.layout.tsx", () => {
                 route("login", "pages/login.page.tsx");
+                route("sign-up", "pages/sign-up.page.tsx");
+                route("forgot-password", "pages/forgot-password.page.tsx");
+                route("reset-password/:token", "pages/reset-password.page.tsx");
               });
           });
           // Catch-all 404 route (must be last)

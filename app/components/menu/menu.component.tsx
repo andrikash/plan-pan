@@ -20,6 +20,7 @@ import { useTranslation } from "react-i18next";
 import { Locales } from "~/const/constants";
 import { useNavigate } from "@remix-run/react";
 import { SecondaryText } from "../typography/secondary-text.component";
+import { useGetApiAuthProfile } from "~/api/auth/auth";
 
 export const Menu = () => {
   const { t, i18n } = useTranslation();
@@ -30,6 +31,10 @@ export const Menu = () => {
     i18n.changeLanguage(lang);
     navigate(`/${lang}/landing-page`);
   };
+
+  const { data: user, isSuccess } = useGetApiAuthProfile();
+
+  const isAuthenticated = isSuccess && user;
 
   const lang = i18n.language || Locales.EN;
 
@@ -71,36 +76,55 @@ export const Menu = () => {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          <DropdownMenu>
-            <DropdownMenuTrigger className="hover:bg-accent cursor-pointer px-4 h-9 rounded-md">
-              <CircleUserRound />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>
-                <div className="flex flex-col gap-y-2">
-                  Username
-                  <span className="text-gray-600">{email}</span>
-                </div>
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Personal Information</DropdownMenuItem>
-              <DropdownMenuItem>My Orders</DropdownMenuItem>
-              <DropdownMenuItem>Create a New Order</DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                <div className="flex gap-x-2">
-                  <LogOut />
-                  Log out
-                </div>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          {isAuthenticated && (
+            <DropdownMenu>
+              <DropdownMenuTrigger className="hover:bg-accent cursor-pointer px-4 h-9 rounded-md">
+                <CircleUserRound />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuLabel>
+                  <div className="flex flex-col gap-y-2">
+                    Username
+                    <span className="text-gray-600">{email}</span>
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>
+                  {t("personalInformation", {
+                    defaultValue: "Personal Information",
+                  })}
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  {t("myOrders", { defaultValue: "My Orders" })}
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  {t("createNewOrder", { defaultValue: "Create New Order" })}
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={() => {
+                    localStorage.removeItem("token");
+                    navigate(`/${lang}/auth/login`);
+                  }}
+                >
+                  <div className="flex gap-x-2">
+                    <LogOut />
+                    {t("logOut", { defaultValue: "Log Out" })}
+                  </div>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
         </div>
         <Button
           variant="default"
           onClick={() => navigate(`/${lang}/auth/login`)}
         >
-          {t("place-order", { defaultValue: "Place order" })}
+          {isAuthenticated
+            ? t("place-order", {
+                defaultValue: "Place Order",
+              })
+            : t("sign-in", { defaultValue: "Sign in" })}
         </Button>
       </div>
     </div>

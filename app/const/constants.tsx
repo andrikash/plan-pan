@@ -88,37 +88,45 @@ export const getBenefitCardsInfo = (t: TFunction) => [
   {
     title: t("rigorousSelectionOfAuthors", {
       defaultValue: "Rigorous Selection of Authors",
+      ns: "common",
     }),
     description: t("rigorousSelectionOfAuthors.description", {
       defaultValue:
         "We work exclusively with qualified professionals who hold at least a bachelor’s degree and have proven expertise in relevant academic fields. Every author undergoes a strict selection process, including tests on theoretical knowledge and academic writing skills. Only those who pass all stages successfully are entrusted with client orders.",
+      ns: "common",
     }),
   },
   {
     title: t("specializationAndExpertise", {
       defaultValue: "Specialization and Expertise",
+      ns: "common",
     }),
     description: t("specializationAndExpertise.description", {
       defaultValue:
         "We always match authors to the subject area of your request. For example, we assign literature, philosophy, or social science experts to humanities topics, and professionals in engineering, physics, or biology to technical and scientific subjects. This ensures that every author understands the topic deeply and can handle its nuances confidently.",
+      ns: "common",
     }),
   },
   {
     title: t("academicStandardsYouCanTrust", {
       defaultValue: "Academic Standards You Can Trust",
+      ns: "common",
     }),
     description: t("academicStandardsYouCanTrust.description", {
       defaultValue:
         "Our authors are well-versed in academic norms across different countries (Germany, Austria, Switzerland). They are experts in citation rules, structure, and plagiarism prevention. You can rely on us to deliver original, high-quality work that fully complies with academic expectations.",
+      ns: "common",
     }),
   },
   {
     title: t("provenWritingExperience", {
       defaultValue: "Proven Writing Experience",
+      ns: "common",
     }),
     description: t("provenWritingExperience.description", {
       defaultValue:
         "Our authors bring extensive experience in writing various academic texts—seminar papers, bachelor’s and master’s theses, dissertations, journal articles, and more. They’re not only capable of conducting thorough research but also of presenting the findings in a clear, logical, and compelling way.",
+      ns: "common",
     }),
   },
   {

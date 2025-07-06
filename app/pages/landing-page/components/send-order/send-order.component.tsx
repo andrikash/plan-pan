@@ -148,9 +148,7 @@ export function SendOrder() {
             />
             <InputForm
               form={form}
-              placeholder={t("enterYourEmail", {
-                defaultValue: "Enter your email",
-              })}
+              placeholder="email@example.com"
               label={t("email", {
                 defaultValue: "Email",
               })}

@@ -1,51 +1,34 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "@remix-run/react";
-import { useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { TFunction } from "i18next";
 import { ArrowLeft } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 import { z } from "zod";
-import {
-  getGetApiAuthProfileQueryKey,
-  usePostApiAuthLogin,
-} from "~/api/auth/auth";
+import { usePostApiAuthRegister } from "~/api/auth/auth";
 import { InputForm } from "~/components/forms/input-form.component";
 import { H2Title } from "~/components/typography/h2-title.component";
 import { MainText } from "~/components/typography/main-text.component";
 import { SmallText } from "~/components/typography/small-text.component";
 import { Button } from "~/components/ui/button";
 import { Form } from "~/components/ui/form";
+import { getEmailAndPasswordSchema } from "~/const/auth/utils";
 import { Locales } from "~/const/constants";
 import { AuthErrorResponse } from "~/types/api";
 
-const getFormSchema = (t: TFunction) =>
-  z.object({
-    email: z.string().email({
-      message: t("Invalid email address.", {
-        defaultValue: "Invalid email address.",
-      }),
-    }),
-    password: z.string(),
-  });
-
-const Login = () => {
+const SignUpPage = () => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
-  const formSchema = getFormSchema(t);
+  const formSchema = getEmailAndPasswordSchema(t);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
 
-  const { mutate, isPending } = usePostApiAuthLogin({
+  const { mutate, isPending } = usePostApiAuthRegister({
     mutation: {
-      onSuccess: (response) => {
-        localStorage.setItem("token", response.data.token ?? "");
-        const profileKey = getGetApiAuthProfileQueryKey();
-        queryClient.invalidateQueries({ queryKey: profileKey });
-        navigate(`/${i18n.language || Locales.EN}/place-order`);
+      onSuccess: () => {
+        navigate(`/${i18n.language || Locales.EN}/auth/login`);
         form.reset();
       },
       onError: (error: AxiosError<AuthErrorResponse>) => {
@@ -54,8 +37,8 @@ const Login = () => {
           type: "manual",
           message:
             error.response?.data?.error ||
-            t("Sign in failed.", {
-              defaultValue: "Sign in failed.",
+            t("Registration failed.", {
+              defaultValue: "Registration failed.",
             }),
         });
         form.setFocus("email");
@@ -82,7 +65,7 @@ const Login = () => {
           className="absolute left-0 ml-20"
           onClick={() => navigate(`/${lang}/landing-page`)}
         >
-          <ArrowLeft size={240} />
+          <ArrowLeft />
           <MainText
             text={t("Back to Home", {
               defaultValue: "Back to Home",
@@ -91,8 +74,8 @@ const Login = () => {
           />
         </Button>
         <H2Title
-          title={t("Sign In", {
-            defaultValue: "Sign In",
+          title={t("Sign Up", {
+            defaultValue: "Sign Up",
           })}
         />
       </div>
@@ -102,9 +85,7 @@ const Login = () => {
             <div className="grid grid-rows-2 gap-6">
               <InputForm
                 form={form}
-                placeholder={t("enterYourEmail", {
-                  defaultValue: "Enter your email",
-                })}
+                placeholder="email@example.com"
                 label={t("email", {
                   defaultValue: "Email",
                 })}
@@ -122,44 +103,45 @@ const Login = () => {
                 type="password"
                 fieldName="password"
               />
+              <InputForm
+                form={form}
+                placeholder={t("confirmYourPassword", {
+                  defaultValue: "Confirm your password",
+                })}
+                label={t("confirmPassword", {
+                  defaultValue: "Confirm Password",
+                })}
+                type="password"
+                fieldName="passwordRepeat"
+              />
             </div>
             <div className="flex flex-col gap-y-4">
               <Button
                 type="submit"
                 className="w-full"
-                disabled={isPending}
                 loading={isPending}
+                disabled={isPending}
               >
-                {t("Sign in", {
-                  defaultValue: "Sign in",
+                {t("Sign up", {
+                  defaultValue: "Sign up",
                 })}
               </Button>
-              <Button
-                variant="outline"
-                className="w-full"
-                onClick={(e) => {
-                  e.preventDefault();
-                  navigate(`/${lang}/auth/sign-up`);
-                }}
-              >
-                {t("Sign Up", {
-                  defaultValue: "Sign Up",
-                })}
-              </Button>
-              <Button
-                variant="ghost"
-                onClick={(e) => {
-                  e.preventDefault();
-                  navigate(`/${lang}/auth/forgot-password`);
-                }}
-              >
+              <div className="flex gap-x-2">
                 <SmallText
-                  text={t("Forgot your password?", {
-                    defaultValue: "Forgot your password?",
+                  text={t("Already have an account?", {
+                    defaultValue: "Already have an account?",
                   })}
-                  className="underline text-gray-100"
+                  className="text-gray-100"
                 />
-              </Button>
+                <Link to={`/${lang}/auth/login`}>
+                  <SmallText
+                    text={t("Sign In", {
+                      defaultValue: "Sign In",
+                    })}
+                    className="text-blue-500 underline"
+                  />
+                </Link>
+              </div>
             </div>
           </form>
         </Form>
@@ -168,4 +150,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default SignUpPage;

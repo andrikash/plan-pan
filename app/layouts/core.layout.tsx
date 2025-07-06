@@ -1,7 +1,9 @@
-import { Outlet } from "@remix-run/react";
+import { Outlet, useLocation, useNavigate } from "@remix-run/react";
 import { redirect } from "@remix-run/node";
-import { Locales, locales } from "~/const/constants";
+import { locales } from "~/const/constants";
 import { getLanguageSegmentFromUrl } from "~/lib/utils";
+import { useEffect } from "react";
+import { protectedRoutes } from "~/const/protected-routes";
 
 export const loader = async ({ request }: { request: Request }) => {
   const url = new URL(request.url);
@@ -25,6 +27,23 @@ export const loader = async ({ request }: { request: Request }) => {
   return null;
 };
 
-export default function AuthLayout() {
+export default function CoreLayout() {
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const isProtected = protectedRoutes.some((route) =>
+      pathname.includes(route)
+    );
+
+    const token =
+      typeof window !== "undefined" ? localStorage.getItem("token") : null;
+
+    if (isProtected && !token) {
+      const lang = pathname.split("/")[1] || "en";
+      navigate(`/${lang}/auth/login`);
+    }
+  }, [pathname, navigate]);
+
   return <Outlet />;
 }
