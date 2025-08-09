@@ -26,7 +26,8 @@ import { DatePickerForm } from "~/components/forms/date-picker.component";
 import { NumberInputForm } from "~/components/forms/number-input-form.component";
 import { PhoneInput } from "~/components/ui/phone-input";
 import { MainText } from "~/components/typography/main-text.component";
-import { postApiOrders } from "~/api/orders/orders";
+import { usePostApiOrders } from "~/api/orders/orders";
+import { AxiosError } from "axios";
 
 const getFormSchema = (t: TFunction) =>
   z.object({
@@ -56,24 +57,51 @@ const getFormSchema = (t: TFunction) =>
     lastName: z.string().optional(),
   });
 
-export function SendOrder() {
+// pass onSuccess function or only success redirect
+export function SendOrder({ onSuccess }: { onSuccess?: () => void }) {
   const { t } = useTranslation();
   const formSchema = getFormSchema(t);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
+
+  const { mutate, isPending } = usePostApiOrders({
+    mutation: {
+      onSuccess,
+      onError: (
+        error: AxiosError<{
+          error: string;
+        }>
+      ) => {
+        console.error("Send order error:", error.response?.data?.error);
+
+        form.setError("email", {
+          type: "manual",
+          message:
+            error.response?.data?.error ||
+            t("Failed to send order", {
+              defaultValue: "Failed to send order.",
+            }),
+        });
+      },
+    },
+  });
+
   function onSubmit(values: z.infer<typeof formSchema>) {
     const orderRequestPayload = {
       ...values,
       deadline: values.deadline.toISOString(),
     };
-    postApiOrders(orderRequestPayload);
+
+    mutate({
+      data: orderRequestPayload,
+    });
   }
 
   const workTypeItems = getWorkTypeItems(t);
   const subjectAreaItems = getSubjectAreaItems(t);
   return (
-    <div className="bg-gray-10 px-28 py-12 mx-20 rounded-4xl mt-28">
+    <div className="bg-gray-10 px-28 py-12 mx-20 rounded-4xl">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <div className="grid grid-cols-3 gap-x-6">
@@ -182,7 +210,12 @@ export function SendOrder() {
             />
           </div>
           <div className="flex justify-center items-center">
-            <Button type="submit" className="w-1/2">
+            <Button
+              type="submit"
+              className="w-1/2"
+              disabled={isPending}
+              loading={isPending}
+            >
               {t("sumbit Order", {
                 defaultValue: "Submit Order",
               })}

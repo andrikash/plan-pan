@@ -1,6 +1,7 @@
 import { Link } from "@remix-run/react";
 import { useTranslation } from "react-i18next";
 
+//TODO: Fix not-found path
 const NotFoundPage = () => {
   const { t } = useTranslation();
 

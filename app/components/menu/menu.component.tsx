@@ -18,7 +18,7 @@ import { CircleUserRound, Languages, LogOut } from "lucide-react";
 import { Button } from "../ui/button";
 import { useTranslation } from "react-i18next";
 import { Locales } from "~/const/constants";
-import { useNavigate } from "@remix-run/react";
+import { Link, useNavigate } from "@remix-run/react";
 import { SecondaryText } from "../typography/secondary-text.component";
 import { useGetApiAuthProfile } from "~/api/auth/auth";
 
@@ -32,15 +32,28 @@ export const Menu = () => {
     navigate(`/${lang}/landing-page`);
   };
 
-  const { data: user, isSuccess } = useGetApiAuthProfile();
+  const {
+    data: user,
+    isSuccess,
+    isFetching,
+  } = useGetApiAuthProfile({
+    query: {
+      retry: false, // Don't retry on failure
+      refetchOnWindowFocus: false, // Don't refetch when window regains focus
+      refetchInterval: false, // Don't poll
+      refetchOnReconnect: false, // Don't refetch on reconnect
+    },
+  });
 
   const isAuthenticated = isSuccess && user;
 
   const lang = i18n.language || Locales.EN;
 
   return (
-    <div className="flex items-center justify-between p-20">
-      <img src="/images/logo.png" alt="Logo" className="w-[192px]" />
+    <div className="flex items-center justify-between px-20 py-10">
+      <Link to="/" className="shrink-0">
+        <img src="/images/logo.png" alt="Logo" className="w-[192px]" />
+      </Link>
       <div className="flex gap-x-14">
         <div className="flex items-center gap-x-1">
           <NavigationMenu>
@@ -89,15 +102,19 @@ export const Menu = () => {
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate(`/${lang}/profile`)}>
                   {t("personalInformation", {
                     defaultValue: "Personal Information",
                   })}
                 </DropdownMenuItem>
-                <DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => navigate(`/${lang}/dashboard`)}
+                >
                   {t("myOrders", { defaultValue: "My Orders" })}
                 </DropdownMenuItem>
-                <DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => navigate(`/${lang}/place-order`)}
+                >
                   {t("createNewOrder", { defaultValue: "Create New Order" })}
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
@@ -118,7 +135,15 @@ export const Menu = () => {
         </div>
         <Button
           variant="default"
-          onClick={() => navigate(`/${lang}/auth/login`)}
+          onClick={() => {
+            if (isAuthenticated) {
+              navigate(`/${lang}/place-order`);
+            } else {
+              navigate(`/${lang}/auth/login`);
+            }
+          }}
+          loading={isFetching}
+          className="w-56"
         >
           {isAuthenticated
             ? t("place-order", {

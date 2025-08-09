@@ -14,6 +14,8 @@ import "./tailwind.css";
 import { useTranslation } from "react-i18next";
 import { getLanguageSegmentFromUrl } from "./lib/utils";
 import { useState } from "react";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -50,9 +52,9 @@ export const loader = async ({ request }: { request: Request }) => {
 
 export function Layout({ children }: { children: React.ReactNode }) {
   // Get the locale from the loader
-  const { locale, ENV } = useLoaderData<typeof loader>();
+  const { locale } = useLoaderData<typeof loader>();
+  console.log("locale", locale);
   const { i18n } = useTranslation();
-
   // This hook will change the i18n instance language to the current locale
   // detected by the loader, this way, when we do something to change the
   // language, this locale will change and i18next will load the correct
@@ -68,13 +70,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         {children}
+        <ToastContainer />
         <ScrollRestoration />
         <Scripts />
-        <script
+        {/* <script
           dangerouslySetInnerHTML={{
             __html: `window.ENV = ${JSON.stringify(ENV)}`,
           }}
-        />
+        /> */}
       </body>
     </html>
   );

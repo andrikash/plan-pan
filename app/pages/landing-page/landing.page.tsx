@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 import {
   getBenefitCardsInfo,
   getBenefitCardsWithIconInfo,
+  Locales,
 } from "~/const/constants";
 import HeroSection from "~/pages/landing-page/components/hero-section/hero-section.component";
 import { BenefitCardWithIcon } from "./components/benefit-card-with/benefit-card-with-icon.component";
@@ -18,11 +19,19 @@ import {
 } from "~/components/ui/accordion";
 import { SendOrder } from "./components/send-order/send-order.component";
 import { Footer } from "./components/footer/footer.component";
+import { toast } from "react-toastify";
+import { useGetApiAuthProfile } from "~/api/auth/auth";
+import { useNavigate } from "@remix-run/react";
 
 export default function LandingPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
   const benefitCardsWithIconsInfo = getBenefitCardsWithIconInfo(t);
-  const benefitCrdsInfo = getBenefitCardsInfo(t);
+  const benefitCardsInfo = getBenefitCardsInfo(t);
+  const { data: user, isSuccess } = useGetApiAuthProfile();
+  const lang = i18n.language || Locales.EN;
+
+  const isAuthenticated = isSuccess && user;
   return (
     <div>
       <div className="mb-52">
@@ -88,7 +97,7 @@ export default function LandingPage() {
           />
         </div>
         <div className="flex flex-col gap-y-8">
-          {benefitCrdsInfo.map((card, index) => (
+          {benefitCardsInfo.map((card, index) => (
             <BenefitCard
               title={card.title}
               description={card.description}
@@ -191,7 +200,24 @@ export default function LandingPage() {
           </AccordionItem>
         </Accordion>
       </div>
-      <SendOrder />
+      <div className="mt-28">
+        <SendOrder
+          onSuccess={() => {
+            if (isAuthenticated) {
+              navigate(`/${lang}/dashboard`);
+            } else {
+              toast(
+                t("orderSent", {
+                  defaultValue: "Order sent successfully. Check your enail!",
+                }),
+                {
+                  type: "success",
+                }
+              );
+            }
+          }}
+        />
+      </div>
       <Footer />
     </div>
   );

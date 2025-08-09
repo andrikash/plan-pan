@@ -42,44 +42,47 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
+  loading?: boolean;
 }
 
-function Button({
-  className,
-  variant,
-  size,
-  children,
-  disabled,
-  asChild = false,
-  loading = false,
-  ...props
-}: React.ComponentProps<"button"> &
-  VariantProps<typeof buttonVariants> & {
-    asChild?: boolean;
-    loading?: boolean;
-  }) {
-  const Comp = asChild ? Slot : "button";
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  (
+    {
+      className,
+      variant,
+      size,
+      children,
+      disabled,
+      asChild = false,
+      loading = false,
+      ...props
+    },
+    ref
+  ) => {
+    const Comp = asChild ? Slot : "button";
 
-  return (
-    <Comp
-      data-slot="button"
-      className={cn(buttonVariants({ variant, size, className, loading }))}
-      disabled={disabled || loading}
-      {...props}
-    >
-      {loading && (
-        <Loader2Icon
-          className={cn(
-            "text-muted absolute animate-spin",
-            // Used for conditional styling when button is loading
-            "loading"
-          )}
-        />
-      )}
-      <Slottable>{children}</Slottable>
-    </Comp>
-  );
-}
+    return (
+      <Comp
+        ref={ref}
+        data-slot="button"
+        className={cn(buttonVariants({ variant, size, className, loading }))}
+        disabled={disabled || loading}
+        {...props}
+      >
+        {loading && (
+          <Loader2Icon
+            className={cn(
+              "text-muted absolute animate-spin",
+              // Used for conditional styling when button is loading
+              "loading"
+            )}
+          />
+        )}
+        <Slottable>{children}</Slottable>
+      </Comp>
+    );
+  }
+);
 
 Button.displayName = "Button";
 

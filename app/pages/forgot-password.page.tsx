@@ -12,7 +12,6 @@ import { MainText } from "~/components/typography/main-text.component";
 import { Locales } from "~/const/constants";
 import { usePostApiPasswordForgot } from "~/api/password/password";
 import { AxiosError } from "axios";
-import { AuthErrorResponse } from "~/types/api";
 
 //TODO: Pass language to BE so it can form propert reset password link
 // template {FRONT_END_URL}/{LANG}/auth/reset-password/{RESET_TOKEN}
@@ -32,7 +31,11 @@ const ForgotPasswordPage = () => {
 
   const { mutate, isPending, isSuccess } = usePostApiPasswordForgot({
     mutation: {
-      onError: (error: AxiosError<AuthErrorResponse>) => {
+      onError: (
+        error: AxiosError<{
+          error: string;
+        }>
+      ) => {
         console.error("Forgot password error:", error.response?.data?.error);
         form.setError("email", {
           type: "manual",

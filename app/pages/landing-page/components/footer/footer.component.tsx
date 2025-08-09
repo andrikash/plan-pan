@@ -13,7 +13,11 @@ export function Footer() {
     <div className="bg-secondary-30 px-14 py-12 mx-20 rounded-4xl mt-28 flex flex-col justify-between gap-x-6 mb-12">
       <div className="flex flex-row w-full justify-between">
         <div>
-          <img src="/images/logo.png" alt="Logo" className="w-[192px] mb-6" />
+          <img
+            src="/images/logo.png"
+            alt="Logo"
+            className="w-[192px] mb-6 shrink-0"
+          />
           <SmallText
             text={t("landingPage.footer.description", {
               defaultValue: "Just learn – leave the difficult things to us!",

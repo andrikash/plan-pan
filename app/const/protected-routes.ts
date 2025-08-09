@@ -3,4 +3,6 @@ export const protectedRoutes = [
   "/settings",
   "/profile",
   "/place-order",
+  "/order",
+  "/order/:id",
 ];
