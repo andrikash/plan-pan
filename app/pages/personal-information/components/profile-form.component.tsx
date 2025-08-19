@@ -17,7 +17,6 @@ import { TFunction } from "i18next";
 import { InputForm } from "~/components/forms/input-form.component";
 import { PhoneInput } from "~/components/ui/phone-input";
 import { MainText } from "~/components/typography/main-text.component";
-import { H2Title } from "~/components/typography/h2-title.component";
 import { H4Title } from "~/components/typography/h4-title.component";
 import { useGetApiAuthProfile } from "~/api/auth/auth";
 
