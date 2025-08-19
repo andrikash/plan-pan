@@ -2,9 +2,11 @@ import { useTranslation } from "react-i18next";
 import { Button } from "../../../../components/ui/button";
 import { H1Title } from "~/components/typography/h1-title.component";
 import { MainText } from "~/components/typography/main-text.component";
+import { SEND_ORDER_ID } from "~/const/constants";
 
 const HeroSection = () => {
   const { t } = useTranslation();
+
   return (
     <div className="px-20 relative pt-[120px]">
       <div className="w-[732px]">
@@ -22,7 +24,17 @@ const HeroSection = () => {
           })}
           className="mb-10"
         />
-        <Button variant="default">
+        <Button
+          variant="default"
+          onClick={() => {
+            const placeOrderElement = document.getElementById(SEND_ORDER_ID);
+            if (placeOrderElement) {
+              placeOrderElement.scrollIntoView({
+                behavior: "smooth",
+              });
+            }
+          }}
+        >
           {t("place-order", { defaultValue: "Place order" })}
         </Button>
       </div>

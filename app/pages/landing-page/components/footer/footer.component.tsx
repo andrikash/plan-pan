@@ -4,6 +4,7 @@ import { getMenuItems } from "~/components/menu/menu.constants";
 import { SecondaryText } from "~/components/typography/secondary-text.component";
 import { SmallText } from "~/components/typography/small-text.component";
 import { Button } from "~/components/ui/button";
+import { SEND_ORDER_ID } from "~/const/constants";
 
 export function Footer() {
   const { t } = useTranslation();
@@ -89,7 +90,17 @@ export function Footer() {
           </div>
         </div>
         <div>
-          <Button variant="default">
+          <Button
+            variant="default"
+            onClick={() => {
+              const placeOrderElement = document.getElementById(SEND_ORDER_ID);
+              if (placeOrderElement) {
+                placeOrderElement.scrollIntoView({
+                  behavior: "smooth",
+                });
+              }
+            }}
+          >
             {t("place-order", { defaultValue: "Place order" })}
           </Button>
         </div>

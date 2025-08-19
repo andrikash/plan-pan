@@ -139,3 +139,5 @@ export const getBenefitCardsInfo = (t: TFunction) => [
     }),
   },
 ];
+
+export const SEND_ORDER_ID = "send-order";

@@ -3,6 +3,7 @@ import {
   getBenefitCardsInfo,
   getBenefitCardsWithIconInfo,
   Locales,
+  SEND_ORDER_ID,
 } from "~/const/constants";
 import HeroSection from "~/pages/landing-page/components/hero-section/hero-section.component";
 import { BenefitCardWithIcon } from "./components/benefit-card-with/benefit-card-with-icon.component";
@@ -26,10 +27,10 @@ import { useNavigate } from "@remix-run/react";
 export default function LandingPage() {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
+  const lang = i18n.language || Locales.EN;
   const benefitCardsWithIconsInfo = getBenefitCardsWithIconInfo(t);
   const benefitCardsInfo = getBenefitCardsInfo(t);
   const { data: user, isSuccess } = useGetApiAuthProfile();
-  const lang = i18n.language || Locales.EN;
 
   const isAuthenticated = isSuccess && user;
   return (
@@ -76,7 +77,17 @@ export default function LandingPage() {
           })}
           className="mb-10"
         />
-        <Button variant="default">
+        <Button
+          variant="default"
+          onClick={() => {
+            const placeOrderElement = document.getElementById(SEND_ORDER_ID);
+            if (placeOrderElement) {
+              placeOrderElement.scrollIntoView({
+                behavior: "smooth",
+              });
+            }
+          }}
+        >
           {t("place-order", { defaultValue: "Place order" })}
         </Button>
       </div>
@@ -121,7 +132,17 @@ export default function LandingPage() {
           })}
           className="mb-8"
         />
-        <Button variant="default">
+        <Button
+          variant="default"
+          onClick={() => {
+            const placeOrderElement = document.getElementById(SEND_ORDER_ID);
+            if (placeOrderElement) {
+              placeOrderElement.scrollIntoView({
+                behavior: "smooth",
+              });
+            }
+          }}
+        >
           {t("order-now", { defaultValue: "Order now" })}
         </Button>
       </div>

@@ -28,6 +28,7 @@ import { PhoneInput } from "~/components/ui/phone-input";
 import { MainText } from "~/components/typography/main-text.component";
 import { usePostApiOrders } from "~/api/orders/orders";
 import { AxiosError } from "axios";
+import { SEND_ORDER_ID } from "~/const/constants";
 
 const getFormSchema = (t: TFunction) =>
   z.object({
@@ -100,8 +101,12 @@ export function SendOrder({ onSuccess }: { onSuccess?: () => void }) {
 
   const workTypeItems = getWorkTypeItems(t);
   const subjectAreaItems = getSubjectAreaItems(t);
+
   return (
-    <div className="bg-gray-10 px-28 py-12 mx-20 rounded-4xl">
+    <div
+      className="bg-gray-10 px-28 py-12 mx-20 rounded-4xl scroll-mt-20"
+      id={SEND_ORDER_ID}
+    >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <div className="grid grid-cols-3 gap-x-6">
