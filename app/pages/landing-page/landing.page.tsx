@@ -94,7 +94,7 @@ export default function LandingPage() {
       <div className="px-48 py-20">
         <div className="mb-12">
           <H3Title
-            title={t("how-we-select-authors", {
+            title={t("how-we-select-authors.title", {
               defaultValue:
                 "How We Select the Perfect Authors for Your Academic Work",
             })}
@@ -120,7 +120,7 @@ export default function LandingPage() {
       <OurServices />
       <div className="mt-28 bg-gray-10 px-80 py-20">
         <H3Title
-          title={t("getStartedNow", {
+          title={t("getStartedNow.title", {
             defaultValue: "Get Started Now",
           })}
           className="mb-6"
@@ -149,7 +149,7 @@ export default function LandingPage() {
       <div className="pt-28">
         <div className="mb-12 px-48">
           <H3Title
-            title={t("guaranteedAnonymity", {
+            title={t("guaranteedAnonymity.title", {
               defaultValue: "Guaranteed Anonymity",
             })}
             className="mb-8"
@@ -169,7 +169,7 @@ export default function LandingPage() {
         >
           <AccordionItem value="item-1">
             <AccordionTrigger className="text-secondary-100">
-              {t("guaranteedAnonymity", {
+              {t("guaranteedAnonymity.title", {
                 defaultValue: "Anonymity Guaranteed",
               })}
             </AccordionTrigger>
@@ -182,7 +182,7 @@ export default function LandingPage() {
           </AccordionItem>
           <AccordionItem value="item-2">
             <AccordionTrigger className="text-secondary-100">
-              {t("confidentialityAgreement", {
+              {t("confidentialityAgreement.title", {
                 defaultValue: "Confidentiality Agreement",
               })}
             </AccordionTrigger>
@@ -195,7 +195,7 @@ export default function LandingPage() {
           </AccordionItem>
           <AccordionItem value="item-3">
             <AccordionTrigger className="text-secondary-100">
-              {t("protectionOfYourWork", {
+              {t("protectionOfYourWork.title", {
                 defaultValue: "Protection of Your Work",
               })}
             </AccordionTrigger>
@@ -208,7 +208,7 @@ export default function LandingPage() {
           </AccordionItem>
           <AccordionItem value="item-4">
             <AccordionTrigger className="text-secondary-100">
-              {t("responsibilityOfTheAuthorsAndTheCompany", {
+              {t("responsibilityOfTheAuthorsAndTheCompany.title", {
                 defaultValue: "Responsibility of the Authors and the Company",
               })}
             </AccordionTrigger>

@@ -43,19 +43,23 @@
   "benefit-card-6-value": "4.7/5",
   "benefit-card-6-description": "Customer satisfaction speaks for our quality.",
   "rigorousSelectionOfAuthors": {
+    "title": "Rigorous Selection of Authors",
     "description": "We work exclusively with qualified professionals who hold at least a bachelor’s degree and have proven expertise in relevant academic fields. Every author undergoes a strict selection process, including tests on theoretical knowledge and academic writing skills. Only those who pass all stages successfully are entrusted with client orders."
   },
   "specializationAndExpertise": {
+    "title": "Specialization and Expertise",
     "description": "We always match authors to the subject area of your request. For example, we assign literature, philosophy, or social science experts to humanities topics, and professionals in engineering, physics, or biology to technical and scientific subjects. This ensures that every author understands the topic deeply and can handle its nuances confidently."
   },
   "academicStandardsYouCanTrust": {
+    "title": "Academic Standards You Can Trust",
     "description": "Our authors are well-versed in academic norms across different countries (Germany, Austria, Switzerland). They are experts in citation rules, structure, and plagiarism prevention. You can rely on us to deliver original, high-quality work that fully complies with academic expectations."
   },
   "provenWritingExperience": {
+    "title": "Proven Writing Experience",
     "description": "Our authors bring extensive experience in writing various academic texts—seminar papers, bachelor’s and master’s theses, dissertations, journal articles, and more. They’re not only capable of conducting thorough research but also of presenting the findings in a clear, logical, and compelling way."
   },
-  "tailoredAndThoughtfulApproach": "Tailored and Thoughtful Approach",
-  "qualityControlAndFeedback": {
+  "tailoredAndThoughtfulApproach": {
+    "title": "Tailored and Thoughtful Approach",
     "description": "Every order is treated individually. Whether you need a unique methodology or an unconventional perspective, we find the right author to bring your vision to life. Our experts are familiar with both qualitative and quantitative research methods, and always adapt to your specific needs."
   },
   "workType": {
@@ -71,12 +75,28 @@
     "academic-article": "Academic Article"
   },
   "subjectArea": "Subject area",
+  "searchOrdersByEmail": "Search orders by email...",
+  "filterByStatus": "Filter by status",
+  "orderStatus": {
+    "all": "All"
+  },
+  "noOrders": "No orders found",
+  "orderNo": "Order No.",
+  "workTypeHeader": "Work Type",
+  "email": "Email",
+  "subject": "Subject",
+  "createdAt": "Created At",
+  "deadline": "Deadline",
+  "status": "Status",
+  "shortNumber": "No.",
+  "inProgress": "In Progress",
+  "completed": "Completed",
+  "canceled": "Canceled",
   "Reset password failed": "Reset password failed.",
   "Back to Home": "Back to Home",
   "Forgot Password": "Forgot Password",
   "Check your email": "Check your email",
   "checkYourInbox": "If an account with that email exists, we have sent a password reset link to it. Please check your inbox.",
-  "email": "Email",
   "Submit": "Submit",
   "landingPage": {
     "footer": {
@@ -121,22 +141,28 @@
   "enterYourPhoneNumber": "Enter your phone number",
   "sumbit Order": "Submit Order",
   "how-we-select-authors": {
+    "title": "How We Select the Perfect Authors for Your Academic Work",
     "description": "At our company, we understand how crucial it is to choose the right author for your academic project. That’s why we hold our candidates to the highest standards and carefully evaluate every order. Here’s how we find our authors—and what matters most in our selection process:"
   },
   "getStartedNow": {
+    "title": "Get Started Now",
     "description": "Start your research project today. Our experts are here to support you every step of the way. Benefit from our experience and achieve your academic goals with us."
   },
   "order-now": "Order now",
   "guaranteedAnonymity": {
+    "title": "Anonymity Guaranteed",
     "description": "Your personal data will never be shared with third parties without your explicit consent. All communication and orders are anonymized to protect your privacy. You can be sure that your data will be used solely for processing your order and not for any other purpose."
   },
   "confidentialityAgreement": {
+    "title": "Confidentiality Agreement",
     "description": "Your trust is our top priority. That’s why we offer a clear and binding confidentiality agreement — to guarantee that your data, documents, and personal information remain 100% secure and protected. Whether you're sharing sensitive academic details or proprietary research, we ensure complete discretion at every stage of the collaboration."
   },
   "protectionOfYourWork": {
+    "title": "Protection of Your Work",
     "description": "We treat your work with the same level of care and confidentiality as you do. From encryption to restricted access, every step we take is designed to keep your documents safe and ensure they are never shared, reused, or repurposed — ever. Your intellectual property stays 100% yours."
   },
   "responsibilityOfTheAuthorsAndTheCompany": {
+    "title": "Responsibility of the Authors and the Company",
     "description": "Our authors are not only experts in their fields — they’re committed to delivering work that meets your expectations and complies with academic integrity. And we back that promise as a company. If something’s not right, we’re here to make it right. Because responsibility isn’t optional — it’s our standard."
   },
   "orderSent": "Order created successfully!",
@@ -153,6 +179,24 @@
   "not-found-description": "The page you are looking for doesn't exist or has been moved.",
   "not-found-button": "Back to homepage",
   "Back to Orders": "Back to Orders",
+  "Order": "Order",
+  "currentPasswordRequired": "Current password is required",
+  "passwordsDoNotMatch": "Passwords do not match",
+  "passwordChanged": "Password changed successfully!",
+  "Change password failed": "Change password failed.",
+  "numberOfOrders": "Number of orders",
+  "changePassword": "Change Password",
+  "currentPassword": "Current Password",
+  "setNewPassword": "Set a new Password",
+  "newPassword": "New Password",
+  "repeatNewPassword": "Repeat new Password",
+  "save": "Save",
+  "invalidEmail": "Invalid email address",
+  "username": "Username",
+  "yourFirstName": "Your First Name",
+  "yourLastName": "Your Last Name",
+  "lastName": "Last Name",
+  "Personal Details": "Personal Details",
   "Place Order": "Place Order",
   "Reset Password": "Reset Password",
   "confirmYourPassword": "Confirm your password",

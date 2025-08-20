@@ -27,10 +27,14 @@ import { NumberInputForm } from "~/components/forms/number-input-form.component"
 import { PhoneInput } from "~/components/ui/phone-input";
 import { MainText } from "~/components/typography/main-text.component";
 import { usePostApiOrders } from "~/api/orders/orders";
-import { AxiosError } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import { SEND_ORDER_ID } from "~/const/constants";
+import { CreateOrderRequest } from "~/types/api/createOrderRequest";
+import { BodyType } from "~/api/mutator/custom-instance";
+import { Order } from "~/types/api/order";
+import { useGetApiAuthProfile } from "~/api/auth/auth";
 
-const getFormSchema = (t: TFunction) =>
+const getFormSchema = (t: TFunction, isAuthenticated: boolean | undefined) =>
   z.object({
     workType: z.enum(workTypesEnum, {
       required_error: t("typeOfPaperIsRequired", {
@@ -52,16 +56,35 @@ const getFormSchema = (t: TFunction) =>
       })
       .min(1)
       .max(1000),
-    email: z.string().email(),
+    email: isAuthenticated ? z.string().email().optional() : z.string().email(),
     phoneNumber: z.string().optional(),
     firstName: z.string().optional(),
     lastName: z.string().optional(),
   });
 
 // pass onSuccess function or only success redirect
-export function SendOrder({ onSuccess }: { onSuccess?: () => void }) {
+export function SendOrder({
+  onSuccess,
+}: {
+  onSuccess?: (
+    // TODO: check if possible to get data out of data because right now it is data -> data -> properties (not sure if always)
+    data: AxiosResponse<Order, any>,
+    variables: { data: BodyType<CreateOrderRequest> },
+    context: unknown
+  ) => void;
+}) {
   const { t } = useTranslation();
-  const formSchema = getFormSchema(t);
+  const { data: user, isSuccess } = useGetApiAuthProfile({
+    query: {
+      retry: false, // Don't retry on failure
+      refetchOnWindowFocus: false, // Don't refetch when window regains focus (including tab switches)
+      refetchOnMount: false, // Don't refetch when remounting (e.g., switching tabs)
+      refetchInterval: false, // Don't poll
+      refetchOnReconnect: false, // Don't refetch on reconnect
+    },
+  });
+  const isAuthenticated = Boolean(isSuccess && user);
+  const formSchema = getFormSchema(t, isAuthenticated);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
@@ -92,6 +115,8 @@ export function SendOrder({ onSuccess }: { onSuccess?: () => void }) {
     const orderRequestPayload = {
       ...values,
       deadline: values.deadline.toISOString(),
+      // TODO: check why data doesn't contain real proepreties but never
+      email: user?.data?.email,
     };
 
     mutate({
@@ -179,16 +204,18 @@ export function SendOrder({ onSuccess }: { onSuccess?: () => void }) {
               })}
               fieldName="firstName"
             />
-            <InputForm
-              form={form}
-              placeholder="email@example.com"
-              label={t("email", {
-                defaultValue: "Email",
-              })}
-              fieldName="email"
-              type="email"
-              required
-            />
+            {!isAuthenticated && (
+              <InputForm
+                form={form}
+                placeholder="email@example.com"
+                label={t("email", {
+                  defaultValue: "Email",
+                })}
+                fieldName="email"
+                type="email"
+                required={!isAuthenticated}
+              />
+            )}
             <FormField
               control={form.control}
               name="phoneNumber"

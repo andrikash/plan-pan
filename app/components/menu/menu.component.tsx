@@ -32,6 +32,7 @@ export const Menu = () => {
     navigate(`/${lang}/landing-page`);
   };
 
+  // TODO: check is isAuthenticated is correct, and if so, maybe create a custom hook for it
   const {
     data: user,
     isSuccess,
@@ -39,7 +40,8 @@ export const Menu = () => {
   } = useGetApiAuthProfile({
     query: {
       retry: false, // Don't retry on failure
-      refetchOnWindowFocus: false, // Don't refetch when window regains focus
+      refetchOnWindowFocus: false, // Don't refetch when window regains focus (including tab switches)
+      refetchOnMount: false, // Don't refetch when remounting (e.g., switching tabs)
       refetchInterval: false, // Don't poll
       refetchOnReconnect: false, // Don't refetch on reconnect
     },

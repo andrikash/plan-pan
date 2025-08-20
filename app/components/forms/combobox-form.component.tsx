@@ -45,7 +45,7 @@ export function ComboboxForm({
 }: ComboboxFormProps) {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
-  console.log(open, "open");
+
   return (
     <FormField
       control={form.control}

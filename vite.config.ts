@@ -21,6 +21,7 @@ export default defineConfig({
           route("/", "pages/redirect-to-landing.page.tsx", {
             index: true,
           });
+
           route("/:lang", "layouts/core.layout.tsx", () => {
             route("", "layouts/menu.layout.tsx", () => {
               route("landing-page", "pages/landing-page/landing.page.tsx");
@@ -39,8 +40,9 @@ export default defineConfig({
                 route("reset-password/:token", "pages/reset-password.page.tsx");
               });
           });
+
           // Catch-all 404 route (must be last)
-          route("*", "pages/not-found.page.tsx");
+          route("not-found", "pages/not-found.page.tsx");
         });
       },
     }),

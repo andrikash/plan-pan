@@ -36,7 +36,7 @@ const PlaceOrder = () => {
       </div>
       <div className="pb-10">
         <SendOrder
-          onSuccess={() => {
+          onSuccess={(data) => {
             toast(
               t("orderSent", {
                 defaultValue: "Order created successfully!",
@@ -45,6 +45,8 @@ const PlaceOrder = () => {
                 type: "success",
               }
             );
+            // TODO: eliminate data.data, find better way to get properties
+            navigate(`/${lang}/dashboard/order/${data.data._id}`);
           }}
         />
       </div>

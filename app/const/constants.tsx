@@ -86,7 +86,7 @@ export const getBenefitCardsWithIconInfo = (t: TFunction) => [
 
 export const getBenefitCardsInfo = (t: TFunction) => [
   {
-    title: t("rigorousSelectionOfAuthors", {
+    title: t("rigorousSelectionOfAuthors.title", {
       defaultValue: "Rigorous Selection of Authors",
       ns: "common",
     }),
@@ -97,7 +97,7 @@ export const getBenefitCardsInfo = (t: TFunction) => [
     }),
   },
   {
-    title: t("specializationAndExpertise", {
+    title: t("specializationAndExpertise.title", {
       defaultValue: "Specialization and Expertise",
       ns: "common",
     }),
@@ -108,7 +108,7 @@ export const getBenefitCardsInfo = (t: TFunction) => [
     }),
   },
   {
-    title: t("academicStandardsYouCanTrust", {
+    title: t("academicStandardsYouCanTrust.title", {
       defaultValue: "Academic Standards You Can Trust",
       ns: "common",
     }),
@@ -119,7 +119,7 @@ export const getBenefitCardsInfo = (t: TFunction) => [
     }),
   },
   {
-    title: t("provenWritingExperience", {
+    title: t("provenWritingExperience.title", {
       defaultValue: "Proven Writing Experience",
       ns: "common",
     }),
@@ -130,10 +130,10 @@ export const getBenefitCardsInfo = (t: TFunction) => [
     }),
   },
   {
-    title: t("tailoredAndThoughtfulApproach", {
+    title: t("tailoredAndThoughtfulApproach.title", {
       defaultValue: "Tailored and Thoughtful Approach",
     }),
-    description: t("qualityControlAndFeedback.description", {
+    description: t("tailoredAndThoughtfulApproach.description", {
       defaultValue:
         "Every order is treated individually. Whether you need a unique methodology or an unconventional perspective, we find the right author to bring your vision to life. Our experts are familiar with both qualitative and quantitative research methods, and always adapt to your specific needs.",
     }),
