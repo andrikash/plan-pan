@@ -26,7 +26,7 @@ export default defineConfig({
             route("", "layouts/menu.layout.tsx", () => {
               route("landing-page", "pages/landing-page/landing.page.tsx");
               route("dashboard", "pages/dashboard.page.tsx");
-              route("dashboard/order/:id", "pages/order.page.tsx");
+              route("dashboard/order/:id", "pages/order-page/order.page.tsx");
               route("place-order", "pages/place-order.page.tsx");
               route(
                 "profile",

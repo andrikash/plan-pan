@@ -53,7 +53,6 @@ export const loader = async ({ request }: { request: Request }) => {
 export function Layout({ children }: { children: React.ReactNode }) {
   // Get the locale from the loader
   const { locale } = useLoaderData<typeof loader>();
-  console.log("locale", locale);
   const { i18n } = useTranslation();
   // This hook will change the i18n instance language to the current locale
   // detected by the loader, this way, when we do something to change the

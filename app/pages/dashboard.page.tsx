@@ -39,7 +39,6 @@ export default function Dashboard() {
       refetchOnReconnect: false, // Don't refetch on reconnect
     },
   });
-  console.log(user, "user");
   const [searchByEmail, setSearchByEmail] = useState<undefined | string>(
     undefined
   );
