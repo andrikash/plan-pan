@@ -44,20 +44,10 @@ export function ChangePassword() {
   });
   const lang = i18n.language || Locales.EN;
 
-  const { data: orders } = useGetApiOrders(
-    {
-      pageNumber: 1,
-      pageSize: 100,
-    },
-    {
-      query: {
-        retry: false,
-        refetchOnWindowFocus: false,
-        refetchInterval: false,
-        refetchOnReconnect: false,
-      },
-    }
-  );
+  const { data: orders } = useGetApiOrders({
+    pageNumber: 1,
+    pageSize: 100,
+  });
 
   const { mutate, isPending } = usePostApiPasswordChange({
     mutation: {

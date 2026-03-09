@@ -74,15 +74,7 @@ export function SendOrder({
   ) => void;
 }) {
   const { t } = useTranslation();
-  const { data: user, isSuccess } = useGetApiAuthProfile({
-    query: {
-      retry: false, // Don't retry on failure
-      refetchOnWindowFocus: false, // Don't refetch when window regains focus (including tab switches)
-      refetchOnMount: false, // Don't refetch when remounting (e.g., switching tabs)
-      refetchInterval: false, // Don't poll
-      refetchOnReconnect: false, // Don't refetch on reconnect
-    },
-  });
+  const { data: user, isSuccess } = useGetApiAuthProfile();
   const isAuthenticated = Boolean(isSuccess && user);
   const formSchema = getFormSchema(t, isAuthenticated);
   const form = useForm<z.infer<typeof formSchema>>({

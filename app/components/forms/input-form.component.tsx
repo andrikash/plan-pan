@@ -11,7 +11,7 @@ import { Input } from "../ui/input";
 interface InputFormProps {
   form: any; // TODO: Replace with the actual type of your form control
   placeholder: string;
-  label: string;
+  label?: string;
   required?: boolean;
   fieldName: string;
   type?: string;
@@ -31,10 +31,12 @@ export function InputForm({
       name={fieldName}
       render={({ field }) => (
         <FormItem className="w-full">
-          <FormLabel>
-            <MainText text={label} />
-            {required && <sup className="text-red-500">*</sup>}
-          </FormLabel>
+          {label && (
+            <FormLabel>
+              <MainText text={label} />
+              {required && <sup className="text-red-500">*</sup>}
+            </FormLabel>
+          )}
           <FormControl>
             <Input placeholder={placeholder} type={type} {...field} />
           </FormControl>

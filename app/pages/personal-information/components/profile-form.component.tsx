@@ -40,14 +40,7 @@ export function ProfileInformation({ onSuccess }: { onSuccess?: () => void }) {
     resolver: zodResolver(formSchema),
   });
 
-  const { data } = useGetApiAuthProfile({
-    query: {
-      retry: false, // Don't retry on failure
-      refetchOnWindowFocus: false, // Don't refetch when window regains focus
-      refetchInterval: false, // Don't poll
-      refetchOnReconnect: false, // Don't refetch on reconnect
-    },
-  });
+  const { data } = useGetApiAuthProfile();
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log("Profile updated:", values);

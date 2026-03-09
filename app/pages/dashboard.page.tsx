@@ -24,21 +24,15 @@ import {
   TableRow,
 } from "~/components/ui/table";
 import { Locales } from "~/const/constants";
-import { cn } from "~/lib/utils";
+import { cn, getIsAdmin } from "~/lib/utils";
 import { GetApiOrdersStatus } from "~/types/api";
 
 export default function Dashboard() {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
-  const { data: user } = useGetApiAuthProfile({
-    query: {
-      retry: false, // Don't retry on failure
-      refetchOnWindowFocus: false, // Don't refetch when window regains focus
-      refetchInterval: false, // Don't poll
-      refetchOnReconnect: false, // Don't refetch on reconnect
-    },
-  });
+  const { data: user } = useGetApiAuthProfile();
+
   const [searchByEmail, setSearchByEmail] = useState<undefined | string>(
     undefined
   );
@@ -58,19 +52,18 @@ export default function Dashboard() {
     return () => clearTimeout(timer);
   }, [searchByEmail]);
 
+  // TODO: check why data doesn't contain real proepreties but never
+  const isAdmin = getIsAdmin(user?.data ?? {});
   const { data: orders } = useGetApiOrders(
     {
       pageNumber: 1,
       pageSize: 10,
       status: status === "all" ? undefined : status,
-      email: debouncedSearchByEmail,
+      email: isAdmin ? debouncedSearchByEmail : user?.data?.email,
     },
     {
       query: {
-        retry: false,
-        refetchOnWindowFocus: false,
-        refetchInterval: false,
-        refetchOnReconnect: false,
+        enabled: !!user?.data,
       },
     }
   );
@@ -97,7 +90,7 @@ export default function Dashboard() {
 
   const orderStatuses: GetApiOrdersStatus[] = Object.values(GetApiOrdersStatus);
   return (
-    <div className="px-20 py-20">
+    <div className="px-20 py-6">
       <H2Title
         title={t("myOrders", {
           defaultValue: "My orders",
@@ -106,6 +99,7 @@ export default function Dashboard() {
       />
       <div className="mb-6 flex gap-x-10">
         <div className="w-80">
+          {/* TODO: hide for regular users */}
           <Input
             placeholder={t("searchOrdersByEmail", {
               defaultValue: "Search orders by email...",

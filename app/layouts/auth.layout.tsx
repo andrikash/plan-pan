@@ -22,18 +22,7 @@ export const loader = async ({ request }: { request: Request }) => {
 export default function AuthLayout() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const {
-    data: user,
-    isSuccess,
-    isError,
-  } = useGetApiAuthProfile({
-    query: {
-      retry: false, // Don't retry on failure
-      refetchOnWindowFocus: false, // Don't refetch when window regains focus
-      refetchInterval: false, // Don't poll
-      refetchOnReconnect: false, // Don't refetch on reconnect
-    },
-  });
+  const { data: user, isSuccess, isError } = useGetApiAuthProfile();
 
   // TODO: handle the token with a cookie
   useEffect(() => {

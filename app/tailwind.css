@@ -55,7 +55,9 @@
 
 html,
 body {
-  @apply bg-light-yellow text-gray-100 dark:bg-gray-950 font-hanuman h-full;
+  @apply bg-light-yellow text-gray-100 dark:bg-gray-950 font-hanuman;
+  min-height: 100dvh;
+  margin: 0;
 
   @media (prefers-color-scheme: dark) {
     color-scheme: dark;

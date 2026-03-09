@@ -16,6 +16,7 @@ import { getLanguageSegmentFromUrl } from "./lib/utils";
 import { useState } from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -83,10 +84,27 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  const [queryClient] = useState(() => new QueryClient());
+  const isDev = process.env.NODE_ENV === "development";
+  console.log("isDev", isDev);
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            staleTime: 5 * 60 * 1000, // 5 minutes
+            refetchOnWindowFocus: isDev ? false : true, // development: don't refetch when window regains focus (including tab switches), production: refetch when window regains focus (including tab switches)
+            refetchOnMount: isDev ? false : true, // development: don't refetch when remounting (e.g., switching tabs), production: refetch when remounting (e.g., switching tabs)
+            refetchOnReconnect: isDev ? false : true, // development: don't refetch when reconnecting, production: refetch when reconnecting
+            refetchInterval: isDev ? false : false, // development: don't poll, production: poll
+            retry: isDev ? false : true, // development: don't retry, production: retry
+          },
+        },
+      })
+  );
   return (
     <QueryClientProvider client={queryClient}>
       <Outlet />
+      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
 }
